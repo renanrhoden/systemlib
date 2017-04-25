@@ -2,7 +2,6 @@ package library;
 
 public class ScientificArticle extends LibraryItem{
 	private String author;
-	private static final String AUTHOR_REQUEST_MESSAGE = "Type here the name of the author:";
 
 	
 	public boolean getDataFromUser(String field) {

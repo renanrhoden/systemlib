@@ -3,7 +3,6 @@ package library;
 public class Megazine extends LibraryItem{
 
 	private String editor;
-	private static final String EDITOR_REQUEST_MESSAGE = "Type here the name of the editor:";
 
 	public boolean getDataFromUser(String field) {
 		String userData;
