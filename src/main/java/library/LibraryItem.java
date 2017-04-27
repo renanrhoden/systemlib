@@ -97,6 +97,12 @@ public class LibraryItem {
 	public boolean isAvailable() {
 		return available;
 	}
+	
+	public int isAvailable(boolean toInt) {
+		if (isAvailable()){
+			return 1;
+		} else return 0;
+	}
 
 	public void setAvailable(boolean available) {
 		this.available = available;

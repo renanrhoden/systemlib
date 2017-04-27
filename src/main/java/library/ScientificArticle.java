@@ -2,6 +2,16 @@ package library;
 
 public class ScientificArticle extends LibraryItem{
 	private String author;
+	
+	public static ScientificArticle getExampleOfArticle(){
+		ScientificArticle article = new ScientificArticle();
+		article.setAuthor("Rhoden");
+		article.setAvailable(true);
+		article.setBarCode("02134587");
+		article.setName("A vida e as aventuras de Luna");
+		article.setNumberOfPages(42);
+		return article;
+	}
 
 	
 	public boolean getDataFromUser(String field) {
@@ -24,8 +34,6 @@ public class ScientificArticle extends LibraryItem{
 		}
 		return false;
 	}
-	
-
 	
 	public String getAuthor() {
 		return author;

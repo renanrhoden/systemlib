@@ -1,19 +1,25 @@
 package library;
-
-import helper.Messages;
+import db.LibraryDB;
 
 public class LibSystem {
 
 	public static void main(String[] args) {
-		
-		Book book = new Book();
-
-		for (String key : Messages.getMessages().keySet()){
+		LibraryDB.createBookTableIfNotExists();
+		//Book book = new Book();
+		/*
+		for (String key : Messages.getMessages().keySet()) {
 			book.requestData(Messages.getMessages().get(key), key);
 		}
 		
-		System.out.println(book);
+		
+		//LibraryDB.registerNewBook(Book.getExampleOfBook());
+		LibraryDB.createMegazineTableIfNotExists();
+		LibraryDB.registerNewMegazine(Megazine.getExpleOFMegazine());
+		*/
+		LibraryDB.createScientificArticleTableIfNotExists();
+		LibraryDB.registerNewScientificArticle(ScientificArticle.getExampleOfArticle());
+		
+		LibraryDB.printTable();
 
 	}
-
 }

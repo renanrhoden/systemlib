@@ -3,46 +3,47 @@ import org.junit.Test;
 
 import library.Book;
 import org.junit.Assert;
+import org.junit.Before;
 
 public class BookTest {
-	@Test public void testGetDataFromUserWithBarCode() {
-		Book book =  new Book();
-		Assert.assertTrue(book.saveDataFromUser("barcode"));
+	Book book;
+	@Before public void initialize(){
+		 book =  new Book();
 	}
 	
-	@Test public void testGetDataFromUserWithName() {
-		Book book =  new Book();
-		Assert.assertTrue(book.saveDataFromUser("name"));
+	@Test public void testSaveDataFromUserWithBarCode() {
+		Assert.assertTrue(book.saveDataFromUser("barcode", "15436547"));
 	}
 	
-	@Test public void testGetDataFromUserWithAuthor() {
-		Book book =  new Book();
-		Assert.assertTrue(book.saveDataFromUser("author"));
+	@Test public void testSaveDataFromUserWithName() {
+		Assert.assertTrue(book.saveDataFromUser("name", "Renan"));
 	}
 	
-	@Test public void testGetDataFromUserWithISBN() {
-		Book book =  new Book();
-		Assert.assertTrue(book.saveDataFromUser("ISBN"));
+	@Test public void testSaveDataFromUserWithAuthor() {
+		Assert.assertTrue(book.saveDataFromUser("author", "Rhoden"));
 	}
 	
-	@Test public void testGetDataFromUserWithNumberOFPages() {
-		Book book =  new Book();
-		Assert.assertTrue(book.saveDataFromUser("numberOfPages"));
+	@Test public void testSaveDataFromUserWithISBN() {
+		Assert.assertTrue(book.saveDataFromUser("ISBN", "1234567890123"));
 	}
 	
-	@Test public void testGetDataFromUserWithEdition() {
-		Book book =  new Book();
-		Assert.assertTrue(book.saveDataFromUser("edition"));
+	@Test public void testSaveDataFromUserWithNumberOFPages() {
+		Assert.assertTrue(book.saveDataFromUser("numberOfPages", "012"));
 	}
 	
-	@Test public void testGetDataFromUserWithAvailable() {
-		Book book =  new Book();
-		Assert.assertTrue(book.saveDataFromUser("available"));
+	@Test public void testSaveDataFromUserWithEdition() {
+		Assert.assertTrue(book.saveDataFromUser("edition", "8"));
 	}
 	
-	@Test public void testGetDataFromUserWithSubject() {
-		Book book =  new Book();
-		Assert.assertTrue(book.saveDataFromUser("subject"));
+	@Test public void testSaveDataFromUserWithAvailable() {
+		Assert.assertTrue(book.saveDataFromUser("available", "y"));
+	}
+	
+	@Test public void testSaveDataFromUserWithSubject() {
+		Assert.assertTrue(book.saveDataFromUser("subject", "Science"));
 	}
 	
 }
+
+
+
