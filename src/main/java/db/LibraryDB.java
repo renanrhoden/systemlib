@@ -99,7 +99,7 @@ public class LibraryDB {
 			System.out.println(sql);
 			stmt.executeUpdate(sql);
 			return true;
-		} catch ( Exception e ) {
+		} catch ( SQLException e ) {
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 			System.exit(0);
 
@@ -121,8 +121,9 @@ public class LibraryDB {
 
 			stmt.executeUpdate(query.toString());
 			System.out.println(query.toString());
-		} catch (Exception e){
-			
+		} catch ( SQLException e) {
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			return false;
 		}
 		
 		return true;
@@ -169,7 +170,7 @@ public class LibraryDB {
 			System.out.println(sql);
 			stmt.executeUpdate(sql);
 			return true;
-		} catch ( Exception e ) {
+		} catch ( SQLException e ) {
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 			System.exit(0);
 
