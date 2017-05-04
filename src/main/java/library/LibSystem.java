@@ -1,4 +1,7 @@
 package library;
+
+import java.io.IOException;
+
 import db.LibraryDB;
 import items.Book;
 import items.Megazine;
@@ -15,6 +18,13 @@ public class LibSystem {
 		}
 		
 		*/
+		
+		try {
+			String password = new jline.ConsoleReader().readLine(new Character('*'));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		LibraryDB.registerNewItem(Book.getExampleOfBook());
 		
 		LibraryDB.createMegazineTableIfNotExists();

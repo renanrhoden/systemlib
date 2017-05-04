@@ -28,5 +28,8 @@ dependencies {
     compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.7.2'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     compile 'com.github.gchudnov.squel:squel:0.9.0'
+    // https://mvnrepository.com/artifact/jline/jline
+	compile group: 'jline', name: 'jline', version: '0.9.94'
+    
 }
 
