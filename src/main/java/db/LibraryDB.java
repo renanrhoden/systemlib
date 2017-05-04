@@ -22,7 +22,7 @@ public class LibraryDB {
 			System.out.println("Opened database successfully");
 			stmt = dBConnection.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS book " +
-					"(id INTEGER PRIMARY KEY    NOT NULL," +
+					"(id INTEGER PRIMARY KEY    NOT NULL, " +
 					" name           NVARCHAR  	NOT NULL, " + 
 					" author         INT   	  	NOT NULL, " + 
 					" barcode        NCHAR(8)	NOT NULL, " + 
@@ -32,7 +32,7 @@ public class LibraryDB {
 					" edition		 INT				, " +
 					" year			 INT				, " +
 					" subject		 NVARCHAR			  " +
-					")"; 
+					");"; 
 			stmt.executeUpdate(sql);
 			
 		} catch ( SQLException | ClassNotFoundException e) {
@@ -57,7 +57,7 @@ public class LibraryDB {
 					" available		 BOOLEAN	NOT NULL, " +
 					" edition		 INT				, " +
 					" editor		 NVARCHAR			 "
-					+ ")"; 
+					+ ");"; 
 			stmt.executeUpdate(sql);
 
 		} catch ( SQLException | ClassNotFoundException e) {
@@ -81,21 +81,45 @@ public class LibraryDB {
 		return dBConnection;
 	}
 
-	public static boolean registerNewBook(Book book){
+
+
+	public static boolean registerNewItem(Book book){
 
 		try{
-			String sql = 	"INSERT INTO book " +
-					"(name, author, barcode, numberOfPages, available, isbn, edition, year, subject)" + 
-					"VALUES ('" +
-					book.getName() +		"', '" +
-					book.getAuthor() +		"', '" +
-					book.getBarcode() +		"', " +
-					book.getNumberOfPages()+", " +
-					book.isAvailable() +	", '" + 
-					book.getISBN() +		"', " +
-					book.getEdition() +		", " +
-					book.getYear() +		", '" +
-					book.getSubject() +		"'); ";
+			QueryBuilder query = Squel.insert()
+					.into("book")
+					.set("name", book.getName())
+					.set("author", book.getAuthor())
+					.set("barcode", book.getBarcode())
+					.set("numberOfPages", book.getNumberOfPages())
+					.set("available", book.isAvailable(true))
+					.set("isbn", book.getISBN())
+					.set("edition", book.getEdition())
+					.set("year", book.getYear())
+					.set("subject", book.getSubject());
+			String sql = query.toString();
+			System.out.println(sql);
+			stmt.executeUpdate(sql);
+			return true;
+		} catch ( SQLException e ) {
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			return false;
+		}
+
+	}
+	
+	public static boolean registerNewItem(Megazine megazine){
+
+		try{			
+			QueryBuilder query = Squel.insert()
+					.into("megazine")
+					.set("name", megazine.getName())
+					.set("barcode", megazine.getBarcode())
+					.set("numberOfPages", megazine.getNumberOfPages())
+					.set("available", megazine.isAvailable(true))
+					.set("edition", megazine.getEdition())
+					.set("editor", megazine.getEditor());
+			String sql = query.toString();
 			System.out.println(sql);
 			stmt.executeUpdate(sql);
 			return true;
@@ -109,7 +133,7 @@ public class LibraryDB {
 	}
 	
 	
-	public static boolean registerNewScientificArticle(ScientificArticle article){
+	public static boolean registerNewItem(ScientificArticle article){
 		try{
 			QueryBuilder query = Squel.insert()
 					.into("Scientific_Article")
@@ -121,12 +145,12 @@ public class LibraryDB {
 
 			stmt.executeUpdate(query.toString());
 			System.out.println(query.toString());
+			return true;
+			
 		} catch ( SQLException e) {
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 			return false;
 		}
-		
-		return true;
 	}
 
 	
@@ -142,7 +166,7 @@ public class LibraryDB {
 					" numberOfPages  INT 				, " + 
 					" available		 BOOLEAN	NOT NULL, " +
 					" author		 NVARCHAR			 " 
-					+ ")"; 
+					+ ");"; 
 			stmt.executeUpdate(sql);
 
 		} catch ( SQLException | ClassNotFoundException e) {
@@ -154,30 +178,7 @@ public class LibraryDB {
 		return true;
 	}
 	
-	public static boolean registerNewMegazine(Megazine megazine){
 
-		try{
-			String sql = 	"INSERT INTO megazine " +
-					"(name, barcode, numberOfPages, available, edition, editor)" + 
-					"VALUES ('" +
-					megazine.getName() +		"', '" +
-					megazine.getBarcode() +		"', " +
-					megazine.getNumberOfPages()+", " +
-					megazine.isAvailable( true ) +	", " + 
-					megazine.getEdition() +		", '" +
-					megazine.getEditor() + 		"'" +
-					"); ";
-			System.out.println(sql);
-			stmt.executeUpdate(sql);
-			return true;
-		} catch ( SQLException e ) {
-			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-			System.exit(0);
-
-			return false;
-		}
-
-	}
 	
 	public static void printTable(){
 		try {
@@ -185,7 +186,7 @@ public class LibraryDB {
 		      System.out.println("Opened database successfully");
 
 		      stmt = dBConnection.createStatement();
-		      ResultSet rs = stmt.executeQuery( "SELECT * FROM scientific_article;" );
+		      ResultSet rs = stmt.executeQuery( "SELECT * FROM book;" );
 		      while ( rs.next() ) {
 		         int id = rs.getInt("id");
 		         String  name = rs.getString("name");
