@@ -3,7 +3,7 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-import library.Megazine;
+import items.Megazine;
 
 public class MagazineTest {
 

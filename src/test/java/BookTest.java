@@ -1,7 +1,8 @@
 
 import org.junit.Test;
 
-import library.Book;
+import items.Book;
+
 import org.junit.Assert;
 import org.junit.Before;
 

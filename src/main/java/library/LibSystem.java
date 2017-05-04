@@ -1,5 +1,8 @@
 package library;
 import db.LibraryDB;
+import items.Book;
+import items.Megazine;
+import items.ScientificArticle;
 
 public class LibSystem {
 

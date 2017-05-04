@@ -8,9 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import com.github.gchudnov.squel.*;
 
-import library.Book;
-import library.Megazine;
-import library.ScientificArticle;
+import items.Book;
+import items.Megazine;
+import items.ScientificArticle;
 
 public class LibraryDB {
 	private static Connection dBConnection;
@@ -25,7 +25,7 @@ public class LibraryDB {
 					"(id INTEGER PRIMARY KEY    NOT NULL, " +
 					" name           NVARCHAR  	NOT NULL, " + 
 					" author         INT   	  	NOT NULL, " + 
-					" barcode        NCHAR(8)	NOT NULL, " + 
+					" barcode        NCHAR(8)	UNIQUE NOT NULL, " + 
 					" numberOfPages  INT 				, " + 
 					" available		 NCHAR		NOT NULL, " +
 					" isbn			 NCHAR(13)	NOT NULL, " + 
@@ -36,8 +36,12 @@ public class LibraryDB {
 			stmt.executeUpdate(sql);
 			
 		} catch ( SQLException | ClassNotFoundException e) {
+			if ( e.getMessage().equals(e.getMessage())){
+				System.out.println("Já há um registro com esse código de barras, por favor, insira outro");
+			} else {
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 			return false;
+			}
 			
 		}
 		System.out.println("Table created successfully");
@@ -102,10 +106,20 @@ public class LibraryDB {
 			stmt.executeUpdate(sql);
 			return true;
 		} catch ( SQLException e ) {
+			if ( repeatedBarcode(e)){
+				System.out.println("Já há um registro com esse código de barras, por favor, insira outro");
+				
+			} else {
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			
+			}
 			return false;
 		}
 
+	}
+
+	private static boolean repeatedBarcode(SQLException e) {
+		return e.getMessage().equals("column barcode is not unique");
 	}
 	
 	public static boolean registerNewItem(Megazine megazine){

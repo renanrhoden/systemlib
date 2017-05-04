@@ -1,8 +1,7 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-
-import library.ScientificArticle;
+import items.ScientificArticle;
 
 public class ScientificArticleTest {
 

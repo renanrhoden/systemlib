@@ -1,4 +1,4 @@
-package library;
+package items;
 
 import org.apache.commons.lang3.StringUtils;
 

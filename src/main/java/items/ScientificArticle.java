@@ -1,4 +1,4 @@
-package library;
+package items;
 
 public class ScientificArticle extends LibraryItem{
 	private String author;
