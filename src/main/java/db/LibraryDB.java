@@ -4,6 +4,7 @@ import java.sql.Connection;
 
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import com.github.gchudnov.squel.*;
@@ -144,8 +145,6 @@ public class LibraryDB {
 
 	}
 
-
-
 	public static boolean registerNewItem(Megazine megazine){
 		createMegazineTableIfNotExists();
 
@@ -202,22 +201,33 @@ public class LibraryDB {
 			System.out.println("Opened database successfully");
 
 			stmt = dBConnection.createStatement();
-			ResultSet rs = stmt.executeQuery( "SELECT * FROM book;" );
-			while ( rs.next() ) {
+			
+			/*
+			while ( rs.next()) {
 				int id = rs.getInt("id");
+				
 				String  name = rs.getString("name");
 
 				System.out.println( "ID = " + id );
 				System.out.println( "NAME = " + name );
 
-			}
-			rs.close();
-			close();
+			}*/
+			//close();
 		} catch ( Exception e ) {
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-			System.exit(0);
 		}
 		System.out.println("Operation done successfully");
+	}
+
+	public static ResultSet showColumnsNames(String table) throws SQLException {
+		dBConnection.setAutoCommit(false);
+		stmt = dBConnection.createStatement();
+		ResultSet rs = stmt.executeQuery( "SELECT * FROM " + table + ";" );
+		ResultSetMetaData rsmd = rs.getMetaData();
+		for (int i = 1; i <= rsmd.getColumnCount(); i++ ){
+			System.out.println(rsmd.getColumnName(i));
+		}
+		return rs;
 	}
 
 }
