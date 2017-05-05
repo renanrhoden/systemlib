@@ -13,6 +13,7 @@ import items.Megazine;
 import items.ScientificArticle;
 
 public class LibraryDB {
+	private static final String BARCODE_NOT_UNIQUE = "Já há um registro com esse código de barras, por favor, insira outro";
 	private static Connection dBConnection;
 	private static Statement stmt;
 
@@ -34,20 +35,20 @@ public class LibraryDB {
 					" subject		 NVARCHAR			  " +
 					");"; 
 			stmt.executeUpdate(sql);
-			
+
 		} catch ( SQLException | ClassNotFoundException e) {
 			if ( e.getMessage().equals(e.getMessage())){
-				System.out.println("Já há um registro com esse código de barras, por favor, insira outro");
+				System.out.println(BARCODE_NOT_UNIQUE);
 			} else {
-			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-			return false;
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				return false;
 			}
-			
+
 		}
 		System.out.println("Table created successfully");
 		return true;
 	}
-	
+
 	public static boolean createMegazineTableIfNotExists(){
 		try {
 			dBConnection = connectToDB();
@@ -56,7 +57,7 @@ public class LibraryDB {
 			String sql = "CREATE TABLE IF NOT EXISTS megazine " +
 					"(id INTEGER PRIMARY KEY    NOT NULL," +
 					" name           NVARCHAR  	NOT NULL, " + 
-					" barcode        NCHAR(8)	NOT NULL, " + 
+					" barcode        NCHAR(8)	UNIQUE NOT NULL, " + 
 					" numberOfPages  INT 				, " + 
 					" available		 BOOLEAN	NOT NULL, " +
 					" edition		 INT				, " +
@@ -67,7 +68,31 @@ public class LibraryDB {
 		} catch ( SQLException | ClassNotFoundException e) {
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 			return false;
-			
+
+		}
+		System.out.println("Table created successfully");
+		return true;
+	}
+
+	public static boolean createScientificArticleTableIfNotExists(){
+		try {
+			dBConnection = connectToDB();
+			System.out.println("Opened database successfully");
+			stmt = dBConnection.createStatement();
+			String sql = "CREATE TABLE IF NOT EXISTS Scientific_Article " +
+					"(id INTEGER PRIMARY KEY    NOT NULL," +
+					" name           NVARCHAR  	NOT NULL, " + 
+					" barcode        NCHAR(8)	UNIQUE NOT NULL, " + 
+					" numberOfPages  INT 				, " + 
+					" available		 BOOLEAN	NOT NULL, " +
+					" author		 NVARCHAR			 " 
+					+ ");"; 
+			stmt.executeUpdate(sql);
+
+		} catch ( SQLException | ClassNotFoundException e) {
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			return false;
+
 		}
 		System.out.println("Table created successfully");
 		return true;
@@ -89,6 +114,7 @@ public class LibraryDB {
 
 	public static boolean registerNewItem(Book book){
 
+		createBookTableIfNotExists();
 		try{
 			QueryBuilder query = Squel.insert()
 					.into("book")
@@ -107,22 +133,21 @@ public class LibraryDB {
 			return true;
 		} catch ( SQLException e ) {
 			if ( repeatedBarcode(e)){
-				System.out.println("Já há um registro com esse código de barras, por favor, insira outro");
-				
+				System.out.println(BARCODE_NOT_UNIQUE);
+
 			} else {
-			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-			
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+
 			}
 			return false;
 		}
 
 	}
 
-	private static boolean repeatedBarcode(SQLException e) {
-		return e.getMessage().equals("column barcode is not unique");
-	}
-	
+
+
 	public static boolean registerNewItem(Megazine megazine){
+		createMegazineTableIfNotExists();
 
 		try{			
 			QueryBuilder query = Squel.insert()
@@ -138,16 +163,15 @@ public class LibraryDB {
 			stmt.executeUpdate(sql);
 			return true;
 		} catch ( SQLException e ) {
-			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-			System.exit(0);
-
+			System.out.println(BARCODE_NOT_UNIQUE);
 			return false;
 		}
 
 	}
-	
-	
+
+
 	public static boolean registerNewItem(ScientificArticle article){
+		createScientificArticleTableIfNotExists();
 		try{
 			QueryBuilder query = Squel.insert()
 					.into("Scientific_Article")
@@ -160,62 +184,40 @@ public class LibraryDB {
 			stmt.executeUpdate(query.toString());
 			System.out.println(query.toString());
 			return true;
-			
+
 		} catch ( SQLException e) {
-			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			System.out.println(BARCODE_NOT_UNIQUE);
 			return false;
 		}
 	}
 
-	
-	public static boolean createScientificArticleTableIfNotExists(){
-		try {
-			dBConnection = connectToDB();
-			System.out.println("Opened database successfully");
-			stmt = dBConnection.createStatement();
-			String sql = "CREATE TABLE IF NOT EXISTS Scientific_Article " +
-					"(id INTEGER PRIMARY KEY    NOT NULL," +
-					" name           NVARCHAR  	NOT NULL, " + 
-					" barcode        NCHAR(8)	NOT NULL, " + 
-					" numberOfPages  INT 				, " + 
-					" available		 BOOLEAN	NOT NULL, " +
-					" author		 NVARCHAR			 " 
-					+ ");"; 
-			stmt.executeUpdate(sql);
-
-		} catch ( SQLException | ClassNotFoundException e) {
-			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-			return false;
-			
-		}
-		System.out.println("Table created successfully");
-		return true;
+	private static boolean repeatedBarcode(SQLException e) {
+		return e.getMessage().equals("column barcode is not unique");
 	}
-	
 
-	
+
 	public static void printTable(){
 		try {
-		      dBConnection.setAutoCommit(false);
-		      System.out.println("Opened database successfully");
+			dBConnection.setAutoCommit(false);
+			System.out.println("Opened database successfully");
 
-		      stmt = dBConnection.createStatement();
-		      ResultSet rs = stmt.executeQuery( "SELECT * FROM book;" );
-		      while ( rs.next() ) {
-		         int id = rs.getInt("id");
-		         String  name = rs.getString("name");
+			stmt = dBConnection.createStatement();
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM book;" );
+			while ( rs.next() ) {
+				int id = rs.getInt("id");
+				String  name = rs.getString("name");
 
-		         System.out.println( "ID = " + id );
-		         System.out.println( "NAME = " + name );
+				System.out.println( "ID = " + id );
+				System.out.println( "NAME = " + name );
 
-		      }
-		      rs.close();
-		      close();
-		    } catch ( Exception e ) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-		      System.exit(0);
-		    }
-		    System.out.println("Operation done successfully");
+			}
+			rs.close();
+			close();
+		} catch ( Exception e ) {
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			System.exit(0);
+		}
+		System.out.println("Operation done successfully");
 	}
 
 }
