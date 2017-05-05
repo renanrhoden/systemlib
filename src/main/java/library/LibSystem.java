@@ -3,20 +3,20 @@ package library;
 import db.LibraryDB;
 import items.Megazine;
 import items.ScientificArticle;
-import ui.LibUserInterface;
+import ui.UI;
 
 public class LibSystem {
 
 	public static void main(String[] args) {
 		
 
-		LibUserInterface ui = new LibUserInterface();
-		
+		UI ui = new UI();
+		UI.showOptions();/*
 		LibraryDB.registerNewItem(ui.requestBookData());
 		LibraryDB.registerNewItem(Megazine.getExpleOFMegazine());
 		LibraryDB.registerNewItem(ScientificArticle.getExampleOfArticle());
 		
-		LibraryDB.printTable();
+		LibraryDB.printTable();*/
 
 	}
 }
