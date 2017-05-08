@@ -3,6 +3,7 @@
 import org.junit.Assert;
 import org.junit.Test;
 
+import items.Book;
 import items.LibraryItem;
 
 public class LibraryItemTest {
@@ -29,6 +30,12 @@ public class LibraryItemTest {
 	public void testSetAttributesAvailable() {
 		LibraryItem item = new LibraryItem();
 		Assert.assertTrue(item.setAttributes("available", "y"));
+	}
+	
+	@Test
+	public void returnItem(){
+		LibraryItem item = new LibraryItem();
+		Assert.assertTrue(item.returnItem(Book.getExampleOfBook().getBarcode(), "book"));
 	}
 	
 }

@@ -14,7 +14,7 @@ public class UI {
 			+ "To return an item, type '4' \n"
 			+ "To list all borrowed items or by type, type '5' \n"
 			+ "To list all not borrowed items or by type, type '6' \n"
-			+ "To search for an item, type '7'";
+			+ "To search for an item, type '7'\n\n\n";
 
 	public UI() {
 		System.out.println("██   ██ █████     ██████ ██    ██  ██████ ██████ ███████  ███     ████");
@@ -39,6 +39,8 @@ public class UI {
 	public static void showOptions(){
 		System.out.println(OPTIONS);
 	}
+	
+	
 	
 	
 

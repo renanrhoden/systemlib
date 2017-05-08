@@ -1,5 +1,7 @@
 package items;
 
+
+
 import org.apache.commons.lang3.StringUtils;
 
 public class Book extends LibraryItem{
@@ -12,6 +14,20 @@ public class Book extends LibraryItem{
 	private int year;
 	private String subject;
 	
+	public Book(){
+
+	}
+	
+	public Book(String barcode, String name, int numberOfPages, boolean available, String iSBN,
+			String author, int edition, int year, String subject) {
+		super(barcode, name, numberOfPages, available);
+		ISBN = iSBN;
+		this.author = author;
+		this.edition = edition;
+		this.year = year;
+		this.subject = subject;
+	}
+
 	public static Book getExampleOfBook(){
 		Book book = new Book();
 		book.author = "Rhoden";

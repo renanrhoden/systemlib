@@ -3,6 +3,8 @@ package items;
 import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
+import db.LibraryDB;
+
 
 public class LibraryItem {
 
@@ -12,7 +14,63 @@ public class LibraryItem {
 	private boolean available;
 
 	private Scanner sc = new Scanner(System.in);
+	
+	public LibraryItem(){
+	}
+	
+	public LibraryItem(String barcode, String name, int numberOfPages, boolean available) {
+		super();
+		this.barcode = barcode;
+		this.name = name;
+		this.numberOfPages = numberOfPages;
+		this.available = available;
+	}
 
+	public boolean returnItem(String barcode, String type){
+		
+		switch(type.toLowerCase()){
+		case "book":
+			Book book = new Book();
+			book.setBarCode(barcode);
+			LibraryDB.updateItem(book, "available", "1");
+			break;
+		case "megazine":
+			Megazine megazine = new Megazine();
+			megazine.setBarCode(barcode);
+			LibraryDB.updateItem(megazine, "available", "1");
+			break;
+		case "scientific article":
+			ScientificArticle article = new ScientificArticle();
+			article.setBarCode(barcode);
+			LibraryDB.updateItem(article, "available", "1");
+		default: return false;
+		
+		}
+		return true;
+	}
+	
+	public boolean checkOutItem(String barcode, String type){
+		
+		switch(type.toLowerCase()){
+		case "book":
+			Book book = new Book();
+			book.setBarCode(barcode);
+			LibraryDB.updateItem(book, "available", "0");
+			break;
+		case "megazine":
+			Megazine megazine = new Megazine();
+			megazine.setBarCode(barcode);
+			LibraryDB.updateItem(megazine, "available", "0");
+			break;
+		case "scientific article":
+			ScientificArticle article = new ScientificArticle();
+			article.setBarCode(barcode);
+			LibraryDB.updateItem(article, "available", "0");
+		default: return false;
+		
+		}
+		return true;
+	}
 
 	public boolean setAttributes(String field, String userData){
 		switch(field){

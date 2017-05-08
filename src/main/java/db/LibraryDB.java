@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+
 import com.github.gchudnov.squel.*;
 
 import items.Book;
@@ -17,6 +19,21 @@ public class LibraryDB {
 	private static final String BARCODE_NOT_UNIQUE = "Já há um registro com esse código de barras, por favor, insira outro";
 	private static Connection dBConnection;
 	private static Statement stmt;
+	
+	public static void deleteTable(String table){
+		try {
+			dBConnection = connectToDB();
+			System.out.println("Opened database successfully");
+			stmt = dBConnection.createStatement();
+			stmt.executeUpdate("DROP TABLE " + table);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public static boolean createBookTableIfNotExists(){
 		try {
@@ -201,17 +218,17 @@ public class LibraryDB {
 			System.out.println("Opened database successfully");
 
 			stmt = dBConnection.createStatement();
-			
-			/*
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM book;" );
+
 			while ( rs.next()) {
 				int id = rs.getInt("id");
-				
+
 				String  name = rs.getString("name");
 
 				System.out.println( "ID = " + id );
 				System.out.println( "NAME = " + name );
 
-			}*/
+			}
 			//close();
 		} catch ( Exception e ) {
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -229,5 +246,127 @@ public class LibraryDB {
 		}
 		return rs;
 	}
+
+	public static ArrayList<String> getColumnsNames(String table) throws SQLException {
+		ArrayList<String> columnsNames = new ArrayList<>();
+		dBConnection.setAutoCommit(false);
+		stmt = dBConnection.createStatement();
+		ResultSet rs = stmt.executeQuery( "SELECT * FROM " + table + ";" );
+		ResultSetMetaData rsmd = rs.getMetaData();
+		for (int i = 1; i <= rsmd.getColumnCount(); i++ ){
+			columnsNames.add(rsmd.getColumnName(i));
+		}
+		return columnsNames;
+	}
+
+	public static boolean updateItem (Book book, String column, String newValue){
+		try {
+			dBConnection = connectToDB();
+			dBConnection.setAutoCommit(false);
+			stmt = dBConnection.createStatement();
+			QueryBuilder query = Squel.update()
+					.table("book")
+					.set(column, newValue)
+					.where("barcode=" + book.getBarcode() );
+			stmt.executeUpdate( query.toString() );
+			dBConnection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} catch (ClassNotFoundException e) {
+
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
+	public static boolean updateItem (Megazine megazine, String column, String newValue){
+		try {
+			dBConnection.setAutoCommit(false);
+			stmt = dBConnection.createStatement();
+			QueryBuilder query = Squel.update()
+					.table("megazine")
+					.set(column, newValue)
+					.where("barcode=" + megazine.getBarcode() );
+			stmt.executeUpdate( query.toString() );
+			dBConnection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
+	public static boolean updateItem (ScientificArticle article, String column, String newValue){
+		try {
+			dBConnection.setAutoCommit(false);
+			stmt = dBConnection.createStatement();
+			QueryBuilder query = Squel.update()
+					.table("ScientificArticle")
+					.set(column, newValue)
+					.where("barcode=" + article.getBarcode() );
+			stmt.executeUpdate( query.toString() );
+			dBConnection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
+	public static Book getBook(String barcode){
+		Book book = new Book();
+		try {
+			dBConnection = connectToDB();
+			dBConnection.setAutoCommit(false);
+			stmt = dBConnection.createStatement();
+			/*QueryBuilder query = Squel.select()
+				.from("book")
+				.field("*")
+				.where("barcode=" + barcode);*/
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM book WHERE barcode=" + barcode + ";");
+
+			book = new Book(
+					rs.getString("barcode"), 
+					rs.getString("name"),
+					rs.getInt("numberOfPages"),
+					rs.getBoolean("available"),
+					rs.getString("isbn"),
+					rs.getString("author"),
+					rs.getInt("edition"),
+					rs.getInt("year"),
+					rs.getString("subject"));
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return book;
+	}
+	public static boolean listBorrowedItems(){
+		try {
+			dBConnection = connectToDB();
+			dBConnection.setAutoCommit(false);
+			stmt = dBConnection.createStatement();
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM book WHERE available = 1;");
+
+			while (rs.next()) {
+				Book book = new Book(rs.getString("barcode"), rs.getString("name"), rs.getInt("numberOfPages"),
+						rs.getBoolean("available"), rs.getString("isbn"), rs.getString("author"), rs.getInt("edition"),
+						rs.getInt("year"), rs.getString("subject"));
+				System.out.println(book.toString());
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+
+
 
 }
