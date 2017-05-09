@@ -35,7 +35,7 @@ public class LibraryItemTest {
 	@Test
 	public void returnItem(){
 		LibraryItem item = new LibraryItem();
-		Assert.assertTrue(item.returnItem(Book.getExampleOfBook().getBarcode(), "book"));
+		Assert.assertTrue(item.returnItem("book"));
 	}
 	
 }

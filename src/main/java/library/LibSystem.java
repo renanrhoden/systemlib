@@ -13,6 +13,7 @@ public class LibSystem {
 		
 		UI ui = new UI();
 		ui.uiLoop();
+		LibraryDB.printTable();
 		/*
 		UI.showOptions();
 		LibraryDB.deleteTable("book");

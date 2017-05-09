@@ -220,6 +220,7 @@ public class LibraryDB {
 
 	public static void printTable(){
 		try {
+			dBConnection = connectToDB();
 			dBConnection.setAutoCommit(false);
 			System.out.println("Opened database successfully");
 
@@ -229,7 +230,7 @@ public class LibraryDB {
 			while ( rs.next()) {
 				int id = rs.getInt("id");
 
-				String  name = rs.getString("name");
+				String  name = rs.getString("author");
 
 				System.out.println( "ID = " + id );
 				System.out.println( "NAME = " + name );
@@ -277,6 +278,7 @@ public class LibraryDB {
 					.where("barcode=" + book.getBarcode() );
 			stmt.executeUpdate( query.toString() );
 			dBConnection.commit();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
@@ -285,8 +287,9 @@ public class LibraryDB {
 			e.printStackTrace();
 			return false;
 		}
-
+		System.out.println("Item updated succesfully!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		return true;
+		
 	}
 
 	public static boolean updateItem (Megazine megazine, String column, String newValue){
@@ -359,12 +362,13 @@ public class LibraryDB {
 			dBConnection.setAutoCommit(false);
 			stmt = dBConnection.createStatement();
 			ResultSet rs = stmt.executeQuery( "SELECT * FROM book WHERE available = 1;");
-
+			System.out.println("livros");
 			while (rs.next()) {
 				Book book = new Book(rs.getString("barcode"), rs.getString("name"), rs.getInt("numberOfPages"),
 						rs.getBoolean("available"), rs.getString("isbn"), rs.getString("author"), rs.getInt("edition"),
 						rs.getInt("year"), rs.getString("subject"));
 				System.out.println(book.toString());
+				System.out.println("livros");
 			}
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();

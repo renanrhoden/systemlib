@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
 import db.LibraryDB;
+import helper.Messages;
 
 
 public class LibraryItem {
@@ -26,22 +27,23 @@ public class LibraryItem {
 		this.available = available;
 	}
 
-	public boolean returnItem(String barcode, String type){
-		
+	public boolean returnItem(String type){
+		showRequestMessage(Messages.getBookMessages().get("barcode"));
+		String input = getInputFromConsole();
 		switch(type.toLowerCase()){
 		case "book":
 			Book book = new Book();
-			book.setBarCode(barcode);
+			book.setBarCode(input);
 			LibraryDB.updateItem(book, "available", "1");
 			break;
 		case "megazine":
 			Megazine megazine = new Megazine();
-			megazine.setBarCode(barcode);
+			megazine.setBarCode(input);
 			LibraryDB.updateItem(megazine, "available", "1");
 			break;
 		case "scientific article":
 			ScientificArticle article = new ScientificArticle();
-			article.setBarCode(barcode);
+			article.setBarCode(input);
 			LibraryDB.updateItem(article, "available", "1");
 		default: return false;
 		
@@ -49,26 +51,29 @@ public class LibraryItem {
 		return true;
 	}
 	
-	public boolean checkOutItem(String barcode, String type){
+	public boolean checkOutItem(String type){
 		
+		showRequestMessage(Messages.getBookMessages().get("barcode"));
+		String input = getInputFromConsole();
 		switch(type.toLowerCase()){
 		case "book":
 			Book book = new Book();
-			book.setBarCode(barcode);
+			book.setBarCode(input);
 			LibraryDB.updateItem(book, "available", "0");
 			break;
 		case "megazine":
 			Megazine megazine = new Megazine();
-			megazine.setBarCode(barcode);
+			megazine.setBarCode(input);
 			LibraryDB.updateItem(megazine, "available", "0");
 			break;
 		case "scientific article":
 			ScientificArticle article = new ScientificArticle();
-			article.setBarCode(barcode);
+			article.setBarCode(input);
 			LibraryDB.updateItem(article, "available", "0");
 		default: return false;
 		
 		}
+		System.out.println("Item checked out succesfully");
 		return true;
 	}
 

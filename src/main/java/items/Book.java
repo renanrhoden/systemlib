@@ -8,6 +8,7 @@ public class Book extends LibraryItem{
 
 
 
+	private static final String PLEASE_ENTER_THE_REQUIRED_INFORMATION_OR_TYPE_Q_TO_EXIT = "Please enter the required information or type Q to exit";
 	private String ISBN;
 	private String author;
 	private int edition;
@@ -44,21 +45,21 @@ public class Book extends LibraryItem{
 	}
 
 
-	public void requestData( String message, String field ){
+	public boolean requestData( String message, String field ){
 		boolean success;
 		String userData;
 		do {
 			showRequestMessage(message);
 			userData = super.getInputFromConsole();
 			if (userData.equalsIgnoreCase("q")){
-				System.exit(0);
-				break;
+				return false;
 			}
 			success = saveDataFromUser(field, userData);
 			if ( !success ){
-				System.out.println("Please enter the required information or type Q to exit");
+				System.out.println(PLEASE_ENTER_THE_REQUIRED_INFORMATION_OR_TYPE_Q_TO_EXIT);
 			}
 		} while (!success);
+		return true;
 	}
 
 	public boolean saveDataFromUser(String field, String userData) {
