@@ -1,7 +1,5 @@
 package library;
 
-
-
 import db.LibraryDB;
 import items.Book;
 import items.Megazine;
@@ -12,8 +10,10 @@ public class LibSystem {
 
 	public static void main(String[] args) {
 		
-		JTable.
-		//UI ui = new UI();
+		
+		UI ui = new UI();
+		ui.uiLoop();
+		/*
 		UI.showOptions();
 		LibraryDB.deleteTable("book");
 		

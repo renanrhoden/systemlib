@@ -16,7 +16,7 @@ import items.Megazine;
 import items.ScientificArticle;
 
 public class LibraryDB {
-	private static final String BARCODE_NOT_UNIQUE = "Já há um registro com esse código de barras, por favor, insira outro";
+	private static final String BARCODE_NOT_UNIQUE = "This barcode is already registered";
 	private static Connection dBConnection;
 	private static Statement stmt;
 	
@@ -179,7 +179,13 @@ public class LibraryDB {
 			stmt.executeUpdate(sql);
 			return true;
 		} catch ( SQLException e ) {
-			System.out.println(BARCODE_NOT_UNIQUE);
+			if ( repeatedBarcode(e)){
+				System.out.println(BARCODE_NOT_UNIQUE);
+
+			} else {
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+
+			}
 			return false;
 		}
 
@@ -241,6 +247,7 @@ public class LibraryDB {
 		stmt = dBConnection.createStatement();
 		ResultSet rs = stmt.executeQuery( "SELECT * FROM " + table + ";" );
 		ResultSetMetaData rsmd = rs.getMetaData();
+
 		for (int i = 1; i <= rsmd.getColumnCount(); i++ ){
 			System.out.println(rsmd.getColumnName(i));
 		}
