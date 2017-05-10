@@ -3,7 +3,6 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-import items.Book;
 import items.LibraryItem;
 
 public class LibraryItemTest {

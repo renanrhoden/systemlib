@@ -51,7 +51,7 @@ public class LibraryItem {
 		return true;
 	}
 	
-	public LibraryItem searchItem(String type){
+	public LibraryItem search(String type){
 		showRequestMessage(Messages.getBookMessages().get("barcode"));
 		String input = getInputFromConsole();
 		switch(type.toLowerCase()){
@@ -69,7 +69,7 @@ public class LibraryItem {
 
 	}
 
-	public boolean checkOutItem(String type){
+	public boolean checkOut(String type){
 
 		showRequestMessage(Messages.getBookMessages().get("barcode"));
 		String input = getInputFromConsole();

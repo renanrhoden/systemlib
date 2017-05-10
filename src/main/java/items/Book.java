@@ -54,7 +54,7 @@ public class Book extends LibraryItem{
 			if (userData.equalsIgnoreCase("q")){
 				return false;
 			}
-			success = saveDataFromUser(field, userData);
+			success = isEmpty(field, userData);
 			if ( !success ){
 				System.out.println(PLEASE_ENTER_THE_REQUIRED_INFORMATION_OR_TYPE_Q_TO_EXIT);
 			}
@@ -62,7 +62,7 @@ public class Book extends LibraryItem{
 		return true;
 	}
 
-	public boolean saveDataFromUser(String field, String userData) {
+	public boolean isEmpty(String field, String userData) {
 
 		if (!userData.isEmpty()){
 

@@ -7,8 +7,7 @@ public class ScientificArticleTest {
 
 	@Test
 	public void test() {
-		ScientificArticle sciArt = new ScientificArticle();
-		Assert.assertTrue(sciArt.getDataFromUser("author"));
+
 	}
 
 }

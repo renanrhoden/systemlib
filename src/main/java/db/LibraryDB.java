@@ -19,7 +19,7 @@ public class LibraryDB {
 	private static final String BARCODE_NOT_UNIQUE = "This barcode is already registered";
 	private static Connection dBConnection;
 	private static Statement stmt;
-	
+
 	public static void deleteTable(String table){
 		try {
 			dBConnection = connectToDB();
@@ -38,7 +38,6 @@ public class LibraryDB {
 	public static boolean createBookTableIfNotExists(){
 		try {
 			dBConnection = connectToDB();
-			System.out.println("Opened database successfully");
 			stmt = dBConnection.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS book " +
 					"(id INTEGER PRIMARY KEY    NOT NULL, " +
@@ -55,15 +54,9 @@ public class LibraryDB {
 			stmt.executeUpdate(sql);
 
 		} catch ( SQLException | ClassNotFoundException e) {
-			if ( e.getMessage().equals(e.getMessage())){
-				System.out.println(BARCODE_NOT_UNIQUE);
-			} else {
-				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-				return false;
-			}
-
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			return false;
 		}
-		System.out.println("Table created successfully");
 		return true;
 	}
 
@@ -88,14 +81,12 @@ public class LibraryDB {
 			return false;
 
 		}
-		System.out.println("Table created successfully");
 		return true;
 	}
 
 	public static boolean createScientificArticleTableIfNotExists(){
 		try {
 			dBConnection = connectToDB();
-			System.out.println("Opened database successfully");
 			stmt = dBConnection.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS Scientific_Article " +
 					"(id INTEGER PRIMARY KEY    NOT NULL," +
@@ -112,7 +103,6 @@ public class LibraryDB {
 			return false;
 
 		}
-		System.out.println("Table created successfully");
 		return true;
 	}
 
@@ -146,7 +136,6 @@ public class LibraryDB {
 					.set("year", book.getYear())
 					.set("subject", book.getSubject());
 			String sql = query.toString();
-			System.out.println(sql);
 			stmt.executeUpdate(sql);
 			return true;
 		} catch ( SQLException e ) {
@@ -175,7 +164,6 @@ public class LibraryDB {
 					.set("edition", megazine.getEdition())
 					.set("editor", megazine.getEditor());
 			String sql = query.toString();
-			System.out.println(sql);
 			stmt.executeUpdate(sql);
 			return true;
 		} catch ( SQLException e ) {
@@ -204,7 +192,6 @@ public class LibraryDB {
 					.set("available", article.isAvailable(true));
 
 			stmt.executeUpdate(query.toString());
-			System.out.println(query.toString());
 			return true;
 
 		} catch ( SQLException e) {
@@ -222,8 +209,6 @@ public class LibraryDB {
 		try {
 			dBConnection = connectToDB();
 			dBConnection.setAutoCommit(false);
-			System.out.println("Opened database successfully");
-
 			stmt = dBConnection.createStatement();
 			ResultSet rs = stmt.executeQuery( "SELECT * FROM book;" );
 
@@ -236,11 +221,9 @@ public class LibraryDB {
 				System.out.println( "NAME = " + name );
 
 			}
-			//close();
 		} catch ( Exception e ) {
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		}
-		System.out.println("Operation done successfully");
 	}
 
 	public static ResultSet showColumnsNames(String table) throws SQLException {
@@ -278,22 +261,20 @@ public class LibraryDB {
 					.where("barcode=" + book.getBarcode() );
 			stmt.executeUpdate( query.toString() );
 			dBConnection.commit();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		} catch (ClassNotFoundException e) {
-
 			e.printStackTrace();
 			return false;
 		}
-		System.out.println("Item updated succesfully!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		return true;
-		
 	}
 
 	public static boolean updateItem (Megazine megazine, String column, String newValue){
 		try {
+			dBConnection = connectToDB();
 			dBConnection.setAutoCommit(false);
 			stmt = dBConnection.createStatement();
 			QueryBuilder query = Squel.update()
@@ -302,7 +283,7 @@ public class LibraryDB {
 					.where("barcode=" + megazine.getBarcode() );
 			stmt.executeUpdate( query.toString() );
 			dBConnection.commit();
-		} catch (SQLException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -312,6 +293,7 @@ public class LibraryDB {
 
 	public static boolean updateItem (ScientificArticle article, String column, String newValue){
 		try {
+			dBConnection = connectToDB();
 			dBConnection.setAutoCommit(false);
 			stmt = dBConnection.createStatement();
 			QueryBuilder query = Squel.update()
@@ -320,11 +302,10 @@ public class LibraryDB {
 					.where("barcode=" + article.getBarcode() );
 			stmt.executeUpdate( query.toString() );
 			dBConnection.commit();
-		} catch (SQLException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 			return false;
 		}
-
 		return true;
 	}
 
@@ -334,10 +315,6 @@ public class LibraryDB {
 			dBConnection = connectToDB();
 			dBConnection.setAutoCommit(false);
 			stmt = dBConnection.createStatement();
-			/*QueryBuilder query = Squel.select()
-				.from("book")
-				.field("*")
-				.where("barcode=" + barcode);*/
 			ResultSet rs = stmt.executeQuery( "SELECT * FROM book WHERE barcode=" + barcode + ";");
 			book = new Book(
 					rs.getString("barcode"), 
@@ -355,17 +332,13 @@ public class LibraryDB {
 
 		return book;
 	}
-	
+
 	public static Megazine getMegazine(String barcode){
 		Megazine megazine = new Megazine();
 		try {
 			dBConnection = connectToDB();
 			dBConnection.setAutoCommit(false);
 			stmt = dBConnection.createStatement();
-			/*QueryBuilder query = Squel.select()
-				.from("book")
-				.field("*")
-				.where("barcode=" + barcode);*/
 			ResultSet rs = stmt.executeQuery( "SELECT * FROM book WHERE barcode=" + barcode + ";");
 
 			megazine = new Megazine(
@@ -381,17 +354,13 @@ public class LibraryDB {
 
 		return megazine;
 	}
-	
+
 	public static ScientificArticle getArticle(String barcode){
 		ScientificArticle article = new ScientificArticle();
 		try {
 			dBConnection = connectToDB();
 			dBConnection.setAutoCommit(false);
 			stmt = dBConnection.createStatement();
-			/*QueryBuilder query = Squel.select()
-				.from("book")
-				.field("*")
-				.where("barcode=" + barcode);*/
 			ResultSet rs = stmt.executeQuery( "SELECT * FROM book WHERE barcode=" + barcode + ";");
 
 			article = new ScientificArticle(
@@ -406,8 +375,8 @@ public class LibraryDB {
 
 		return article;
 	}
-	
-	
+
+
 	public static boolean listBorrowedItems(boolean available){
 		try {
 			dBConnection = connectToDB();
@@ -430,8 +399,4 @@ public class LibraryDB {
 		}
 		return true;
 	}
-	
-
-
-
 }

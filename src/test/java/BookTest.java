@@ -13,35 +13,35 @@ public class BookTest {
 	}
 	
 	@Test public void testSaveDataFromUserWithBarCode() {
-		Assert.assertTrue(book.saveDataFromUser("barcode", "15436547"));
+		Assert.assertTrue(book.isEmpty("barcode", "15436547"));
 	}
 	
 	@Test public void testSaveDataFromUserWithName() {
-		Assert.assertTrue(book.saveDataFromUser("name", "Renan"));
+		Assert.assertTrue(book.isEmpty("name", "Renan"));
 	}
 	
 	@Test public void testSaveDataFromUserWithAuthor() {
-		Assert.assertTrue(book.saveDataFromUser("author", "Rhoden"));
+		Assert.assertTrue(book.isEmpty("author", "Rhoden"));
 	}
 	
 	@Test public void testSaveDataFromUserWithISBN() {
-		Assert.assertTrue(book.saveDataFromUser("ISBN", "1234567890123"));
+		Assert.assertTrue(book.isEmpty("ISBN", "1234567890123"));
 	}
 	
 	@Test public void testSaveDataFromUserWithNumberOFPages() {
-		Assert.assertTrue(book.saveDataFromUser("numberOfPages", "012"));
+		Assert.assertTrue(book.isEmpty("numberOfPages", "012"));
 	}
 	
 	@Test public void testSaveDataFromUserWithEdition() {
-		Assert.assertTrue(book.saveDataFromUser("edition", "8"));
+		Assert.assertTrue(book.isEmpty("edition", "8"));
 	}
 	
 	@Test public void testSaveDataFromUserWithAvailable() {
-		Assert.assertTrue(book.saveDataFromUser("available", "y"));
+		Assert.assertTrue(book.isEmpty("available", "y"));
 	}
 	
 	@Test public void testSaveDataFromUserWithSubject() {
-		Assert.assertTrue(book.saveDataFromUser("subject", "Science"));
+		Assert.assertTrue(book.isEmpty("subject", "Science"));
 	}
 	
 }

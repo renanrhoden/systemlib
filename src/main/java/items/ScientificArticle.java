@@ -20,36 +20,12 @@ public class ScientificArticle extends LibraryItem{
 		
 	}
 	
-	
-
-	
 	public ScientificArticle(String barcode, String name, int numberOfPages, boolean available, String author) {
 		super(barcode, name, numberOfPages, available);
 		this.author = author;
 	}
-
-	public boolean getDataFromUser(String field) {
-		String userData;
-		userData = getInputFromConsole();
-		boolean hasSetted;
-
-		if (!userData.isEmpty()){
-
-			hasSetted = super.setAttributes(field, userData);
-			if (hasSetted){
-				return true;
-			}else {
-				switch(field){
-				case "author":
-					this.author = userData;
-					return true;
-				}
-			}
-		}
-		return false;
-	}
 	
-	public boolean saveDataFromUser(String field, String userData) {
+	public boolean isEmpty(String field, String userData) {
 		
 		if (!userData.isEmpty()){
 
@@ -57,6 +33,7 @@ public class ScientificArticle extends LibraryItem{
 		}
 		return false;
 	}
+	
 	@Override
 	public boolean setAttributes(String field, String userData) {
 		boolean hasSetted;
@@ -84,7 +61,7 @@ public class ScientificArticle extends LibraryItem{
 			if (userData.equalsIgnoreCase("q")){
 				return false;
 			}
-			success = saveDataFromUser(field, userData);
+			success = isEmpty(field, userData);
 			if ( !success ){
 				System.out.println(PLEASE_ENTER_THE_REQUIRED_INFORMATION_OR_TYPE_Q_TO_EXIT);
 			}
@@ -101,5 +78,7 @@ public class ScientificArticle extends LibraryItem{
 	public void setAuthor(String author) {
 		this.author = author;
 	}
+	
+	
 
 }

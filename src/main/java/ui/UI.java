@@ -122,8 +122,8 @@ public class UI {
 					break;
 				case 7:
 					searchItem();
+					break;
 				}
-				break;
 			}
 		}
 
@@ -138,7 +138,7 @@ public class UI {
 			input = getInputFromConsole();
 			LibraryItem item = new LibraryItem();
 			if (input.equalsIgnoreCase("book") || input.equalsIgnoreCase("megazine") || input.equalsIgnoreCase("scientific article")) {
-				item = item.searchItem(input);
+				item = item.search(input);
 				System.out.println(item.toString());
 			}
 		}
@@ -165,7 +165,7 @@ public class UI {
 			input = getInputFromConsole();
 			LibraryItem item = new LibraryItem();
 			if (input.equalsIgnoreCase("book") || input.equalsIgnoreCase("megazine") || input.equalsIgnoreCase("scientific article")) {
-				item.checkOutItem(input);
+				item.checkOut(input);
 			}
 		}
 	}
@@ -319,17 +319,21 @@ public class UI {
 		String input;
 		input = getInputFromConsole();
 
-		while(!input.equalsIgnoreCase("q") && !StringUtils.isNumeric(input)){
+		while(notValidInput(input)){
 			System.out.println(TYPE_OPTION_AGAIN);
 			input = getInputFromConsole();
-			System.out.println(input);
 		} 
+		
 		if (input.equalsIgnoreCase("q")){
 			return false;
 		} else {
 			option = Integer.parseInt(input);
 			return true;
 		}
+	}
+
+	private boolean notValidInput(String input) {
+		return !input.equalsIgnoreCase("q") && !StringUtils.isNumeric(input);
 	}
 
 	private String getInputFromConsole() {
