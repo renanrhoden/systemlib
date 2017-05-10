@@ -139,7 +139,11 @@ public class UI {
 			LibraryItem item = new LibraryItem();
 			if (input.equalsIgnoreCase("book") || input.equalsIgnoreCase("megazine") || input.equalsIgnoreCase("scientific article")) {
 				item = item.search(input);
-				System.out.println(item.toString());
+				if (!item.getBarcode().equals("")) {
+					System.out.println(item.toString());
+				} else {
+					System.out.println("Item not registered");
+				}
 			}
 		}
 	}
@@ -323,7 +327,7 @@ public class UI {
 			System.out.println(TYPE_OPTION_AGAIN);
 			input = getInputFromConsole();
 		} 
-		
+
 		if (input.equalsIgnoreCase("q")){
 			return false;
 		} else {

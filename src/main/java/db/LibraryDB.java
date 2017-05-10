@@ -316,22 +316,19 @@ public class LibraryDB {
 			dBConnection.setAutoCommit(false);
 			stmt = dBConnection.createStatement();
 			ResultSet rs = stmt.executeQuery( "SELECT * FROM book WHERE barcode=" + barcode + ";");
-			book = new Book(
-					rs.getString("barcode"), 
-					rs.getString("name"),
-					rs.getInt("numberOfPages"),
-					rs.getBoolean("available"),
-					rs.getString("isbn"),
-					rs.getString("author"),
-					rs.getInt("edition"),
-					rs.getInt("year"),
-					rs.getString("subject"));
+			
+			if(rs.next())
+				book = new Book(rs.getString("barcode"), rs.getString("name"), rs.getInt("numberOfPages"),
+						rs.getBoolean("available"), rs.getString("isbn"), rs.getString("author"), rs.getInt("edition"),
+						rs.getInt("year"), rs.getString("subject"));
+			
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 
 		return book;
 	}
+
 
 	public static Megazine getMegazine(String barcode){
 		Megazine megazine = new Megazine();

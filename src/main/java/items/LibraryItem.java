@@ -17,6 +17,7 @@ public class LibraryItem {
 	private Scanner sc = new Scanner(System.in);
 
 	public LibraryItem(){
+		this.barcode = "";
 	}
 
 	public LibraryItem(String barcode, String name, int numberOfPages, boolean available) {
