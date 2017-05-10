@@ -1,6 +1,7 @@
 package ui;
 
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 
@@ -104,6 +105,7 @@ public class UI {
 				switch(option){
 				case 1:{
 					register();
+					break;
 				}
 				case 2:
 					updateItem();	
@@ -124,8 +126,14 @@ public class UI {
 					searchItem();
 					break;
 				}
+				try {
+					LibraryDB.close();
+				} catch (SQLException e) {
+
+				}
 			}
 		}
+
 
 	}
 
@@ -140,7 +148,7 @@ public class UI {
 			if (input.equalsIgnoreCase("book") || input.equalsIgnoreCase("megazine") || input.equalsIgnoreCase("scientific article")) {
 				item = item.search(input);
 				if (!item.getBarcode().equals("")) {
-					System.out.println(item.toString());
+					System.out.println("\n\n" + item.toString());
 				} else {
 					System.out.println("Item not registered");
 				}

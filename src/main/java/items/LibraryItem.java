@@ -196,7 +196,7 @@ public class LibraryItem {
 		return "barcode: " + barcode + ", \n"
 				+ "name: " + name + ", \n"
 				+ "numberOfPages: " + numberOfPages + ", \n"
-				+ "available: " + available + "";
+				+ "available: " + available + "\n\n";
 
 	}
 

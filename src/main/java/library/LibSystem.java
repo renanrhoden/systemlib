@@ -8,5 +8,7 @@ public class LibSystem {
 		
 		UI ui = new UI();
 		ui.uiLoop();
+		System.out.println("Thank you for using our reliable software");
 	}
 }
+   
