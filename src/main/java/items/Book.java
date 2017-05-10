@@ -14,11 +14,11 @@ public class Book extends LibraryItem{
 	private int edition;
 	private int year;
 	private String subject;
-	
+
 	public Book(){
 
 	}
-	
+
 	public Book(String barcode, String name, int numberOfPages, boolean available, String iSBN,
 			String author, int edition, int year, String subject) {
 		super(barcode, name, numberOfPages, available);
@@ -40,7 +40,7 @@ public class Book extends LibraryItem{
 		book.setName("Renan");
 		book.setNumberOfPages(56);
 		book.setAvailable(true);
-			
+
 		return book;
 	}
 
@@ -63,14 +63,14 @@ public class Book extends LibraryItem{
 	}
 
 	public boolean saveDataFromUser(String field, String userData) {
-		
+
 		if (!userData.isEmpty()){
 
 			return setAttributes(field, userData);
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean setAttributes(String field, String userData) {
 		boolean hasSetted;
@@ -78,34 +78,34 @@ public class Book extends LibraryItem{
 		if (hasSetted){
 			return true;
 		} else {
-			
+
 			switch(field){
 			case "ISBN":
 				if ( isInISBNPattern(userData) ){
 					this.ISBN = userData;
 					return true;
 				} else return false;
-				
+
 			case "author":
 				this.author = userData;
 				return true;
-				
+
 			case "edition":
 				if (StringUtils.isNumeric(userData)){
 					this.edition = Integer.parseInt(userData);
 					return true;
 				} else return false;
-				
+
 			case "year":
 				if (StringUtils.isNumeric(userData)){
 					this.year = Integer.parseInt(userData);
 					return true;
 				} else return false;
-				
+
 			case "subject":
 				this.subject = userData;
 				return true;
-			
+
 			default: return false;
 			}
 		}
@@ -117,8 +117,12 @@ public class Book extends LibraryItem{
 
 	@Override
 	public String toString() {
-		return "Book [ISBN=" + ISBN + ", author=" + author + ", edition=" + edition + ", year=" + year + ", subject="
-				+ subject + ", toString()=" + super.toString() + "]";
+		return "Book \n"
+				+ "ISBN: " + ISBN + ", \n"
+				+ "author: " + author + ", \n"
+				+ "edition: " + edition + ", \n"
+				+ "year: " + year + ", \n"
+				+ "subject: " + subject + ", \n" + super.toString() + "";
 	}
 
 	public String getISBN() {
@@ -140,6 +144,6 @@ public class Book extends LibraryItem{
 	public String getSubject() {
 		return subject;
 	}
-	
+
 }
 

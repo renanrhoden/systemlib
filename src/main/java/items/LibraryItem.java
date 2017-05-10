@@ -15,10 +15,10 @@ public class LibraryItem {
 	private boolean available;
 
 	private Scanner sc = new Scanner(System.in);
-	
+
 	public LibraryItem(){
 	}
-	
+
 	public LibraryItem(String barcode, String name, int numberOfPages, boolean available) {
 		super();
 		this.barcode = barcode;
@@ -46,13 +46,13 @@ public class LibraryItem {
 			article.setBarCode(input);
 			LibraryDB.updateItem(article, "available", "1");
 		default: return false;
-		
+
 		}
 		return true;
 	}
-	
+
 	public boolean checkOutItem(String type){
-		
+
 		showRequestMessage(Messages.getBookMessages().get("barcode"));
 		String input = getInputFromConsole();
 		switch(type.toLowerCase()){
@@ -71,7 +71,7 @@ public class LibraryItem {
 			article.setBarCode(input);
 			LibraryDB.updateItem(article, "available", "0");
 		default: return false;
-		
+
 		}
 		System.out.println("Item checked out succesfully");
 		return true;
@@ -79,28 +79,28 @@ public class LibraryItem {
 
 	public boolean setAttributes(String field, String userData){
 		switch(field){
-		
+
 		case "barcode":
 			if ( isPatterned(userData) ){
 				setBarCode(userData);
 				return true;
 			} else return false;
-			
+
 		case "name":
 			setName(userData);
 			return true;
-			
+
 		case "numberOfPages":
 			if (StringUtils.isNumeric(userData)){
 				setNumberOfPages(Integer.parseInt(userData));
 				return true;
 			} else return false;
-			
+
 		case "available":
 			if (userSetAvailability(userData))
 				return true;
 			else return false;
-			
+
 		default: return false;
 		}
 	}
@@ -160,7 +160,7 @@ public class LibraryItem {
 	public boolean isAvailable() {
 		return available;
 	}
-	
+
 	public int isAvailable(boolean toInt) {
 		if (isAvailable()){
 			return 1;
@@ -174,8 +174,11 @@ public class LibraryItem {
 
 	@Override
 	public String toString() {
-		return "LibraryItem [barcode=" + barcode + ", name=" + name + ", numberOfPages=" + numberOfPages
-				+ ", available=" + available + "]";
+		return "barcode: " + barcode + ", \n"
+				+ "name: " + name + ", \n"
+				+ "numberOfPages: " + numberOfPages + ", \n"
+				+ "available: " + available + "";
+
 	}
 
 

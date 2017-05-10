@@ -9,8 +9,9 @@ import ui.UI;
 public class LibSystem {
 
 	public static void main(String[] args) {
+		System.out.println(Book.getExampleOfBook().toString());
 		
-		
+		/*
 		UI ui = new UI();
 		ui.uiLoop();
 		LibraryDB.printTable();
