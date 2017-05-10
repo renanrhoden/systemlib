@@ -101,7 +101,7 @@ public class UI {
 			showOptions();
 			if (!isAnOption()){
 				break;
-			} else{
+			} else {
 				switch(option){
 				case 1:{
 					register();

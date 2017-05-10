@@ -6,15 +6,6 @@ import org.junit.Test;
 
 public class UITest {
 
-	@Test
-	public void testUI() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testUiLoop() {
-		fail("Not yet implemented");
-	}
 
 	@Test
 	public void testRequestBookData() {
