@@ -356,19 +356,21 @@ public class LibraryDB {
 
 		return book;
 	}
-	public static boolean listBorrowedItems(){
+	public static boolean listBorrowedItems(boolean available){
 		try {
 			dBConnection = connectToDB();
 			dBConnection.setAutoCommit(false);
 			stmt = dBConnection.createStatement();
-			ResultSet rs = stmt.executeQuery( "SELECT * FROM book WHERE available = 1;");
-			System.out.println("livros");
+			int status;
+			if (available)
+				status = 1;
+			else status = 0;
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM book WHERE available = " + status + ";");
 			while (rs.next()) {
 				Book book = new Book(rs.getString("barcode"), rs.getString("name"), rs.getInt("numberOfPages"),
 						rs.getBoolean("available"), rs.getString("isbn"), rs.getString("author"), rs.getInt("edition"),
 						rs.getInt("year"), rs.getString("subject"));
 				System.out.println(book.toString());
-				System.out.println("livros");
 			}
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();

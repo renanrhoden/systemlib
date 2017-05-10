@@ -101,9 +101,10 @@ public class UI {
 					returnItem();
 					break;
 				case 5:
-					LibraryDB.listBorrowedItems();
+					LibraryDB.listBorrowedItems(true);
 					break;
 				case 6:
+					LibraryDB.listBorrowedItems(false);
 					break;
 				case 7:
 					break;
