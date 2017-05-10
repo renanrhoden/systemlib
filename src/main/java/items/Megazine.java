@@ -16,8 +16,19 @@ public class Megazine extends LibraryItem{
 	public int getEdition() {
 		return edition;
 	}
-
 	
+	public Megazine(){
+	
+	}
+	
+	
+	public Megazine(String barcode, String name, int numberOfPages, boolean available, String editor, int edition) {
+		super(barcode, name, numberOfPages, available);
+		this.editor = editor;
+		this.edition = edition;
+	}
+
+
 	public static Megazine getExpleOFMegazine(){
 		Megazine megazine = new Megazine();
 		megazine.edition = 156;

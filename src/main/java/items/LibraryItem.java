@@ -50,6 +50,24 @@ public class LibraryItem {
 		}
 		return true;
 	}
+	
+	public LibraryItem searchItem(String type){
+		showRequestMessage(Messages.getBookMessages().get("barcode"));
+		String input = getInputFromConsole();
+		switch(type.toLowerCase()){
+		case "book":
+			return LibraryDB.getBook(input);
+
+		case "megazine":
+			return LibraryDB.getMegazine(input);
+
+		case "scientific article":
+			return LibraryDB.getArticle(input);
+		default: return new LibraryItem();
+
+		}
+
+	}
 
 	public boolean checkOutItem(String type){
 

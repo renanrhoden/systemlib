@@ -339,7 +339,6 @@ public class LibraryDB {
 				.field("*")
 				.where("barcode=" + barcode);*/
 			ResultSet rs = stmt.executeQuery( "SELECT * FROM book WHERE barcode=" + barcode + ";");
-
 			book = new Book(
 					rs.getString("barcode"), 
 					rs.getString("name"),
@@ -356,6 +355,59 @@ public class LibraryDB {
 
 		return book;
 	}
+	
+	public static Megazine getMegazine(String barcode){
+		Megazine megazine = new Megazine();
+		try {
+			dBConnection = connectToDB();
+			dBConnection.setAutoCommit(false);
+			stmt = dBConnection.createStatement();
+			/*QueryBuilder query = Squel.select()
+				.from("book")
+				.field("*")
+				.where("barcode=" + barcode);*/
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM book WHERE barcode=" + barcode + ";");
+
+			megazine = new Megazine(
+					rs.getString("barcode"), 
+					rs.getString("name"),
+					rs.getInt("numberOfPages"),
+					rs.getBoolean("available"),
+					rs.getString("editor"),
+					rs.getInt("edition"));
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return megazine;
+	}
+	
+	public static ScientificArticle getArticle(String barcode){
+		ScientificArticle article = new ScientificArticle();
+		try {
+			dBConnection = connectToDB();
+			dBConnection.setAutoCommit(false);
+			stmt = dBConnection.createStatement();
+			/*QueryBuilder query = Squel.select()
+				.from("book")
+				.field("*")
+				.where("barcode=" + barcode);*/
+			ResultSet rs = stmt.executeQuery( "SELECT * FROM book WHERE barcode=" + barcode + ";");
+
+			article = new ScientificArticle(
+					rs.getString("barcode"), 
+					rs.getString("name"),
+					rs.getInt("numberOfPages"),
+					rs.getBoolean("available"),
+					rs.getString("author"));
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return article;
+	}
+	
+	
 	public static boolean listBorrowedItems(boolean available){
 		try {
 			dBConnection = connectToDB();

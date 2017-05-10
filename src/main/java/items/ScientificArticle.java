@@ -15,8 +15,19 @@ public class ScientificArticle extends LibraryItem{
 		article.setNumberOfPages(42);
 		return article;
 	}
+	
+	public ScientificArticle(){
+		
+	}
+	
+	
 
 	
+	public ScientificArticle(String barcode, String name, int numberOfPages, boolean available, String author) {
+		super(barcode, name, numberOfPages, available);
+		this.author = author;
+	}
+
 	public boolean getDataFromUser(String field) {
 		String userData;
 		userData = getInputFromConsole();

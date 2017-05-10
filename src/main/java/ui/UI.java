@@ -14,6 +14,7 @@ import items.LibraryItem;
 
 public class UI {
 
+	private static final String PLASE_PROVIDE_THE_TYPE_OF_ITEM_YOU_WANT_TO_SEARCH_FOR = "Plase provide the type of item you want to search for: ";
 	private static final String TYPE_THE_TYPE_OF_ITEM_YOU_WANT_TO_REGISTER = "Type the type of item you want to register: ";
 	private static final String TYPE_THE_TYPE_OF_ITEM_YOU_WANT_TO_CHECK_OUT = "Type the type of item you want to check out: ";
 	private static final String TYPE_THE_TYPE_OF_ITEM_YOU_WANT_TO_RETURN = "Type the type of item you want to return: ";
@@ -62,7 +63,7 @@ public class UI {
 			+ "█▄  ▄▀ █   █ █▄   ▄▀ █▄  ▄▀ █  █      ▀████ █   █   █     \n"
 			+ "▀███▀     █  ▀███▀   ▀███▀    █             █▄ ▄█  ▀      \n"
 			+ "         ▀                   ▀               ▀▀▀          \n";
-	
+
 	private static final String RETURN = ""
 			+ "█▄▄▄▄ ▄███▄     ▄▄▄▄▀ ▄   █▄▄▄▄   ▄   \n"
 			+ "█  ▄▀ █▀   ▀ ▀▀▀ █     █  █  ▄▀    █  \n"
@@ -70,6 +71,19 @@ public class UI {
 			+ "█  █  █▄   ▄▀   █   █   █ █  █ █ █  █ \n"
 			+ "  █   ▀███▀    ▀    █▄ ▄█   █  █  █ █ \n"
 			+ " ▀                   ▀▀▀   ▀   █   ██ \n";
+
+	private static final String SEARCH = "" +
+			"   ▄████████    ▄████████    ▄████████    ▄████████  ▄████████    ▄█    █▄    \n " +
+			"   ███    ███   ███    ███   ███    ███   ███    ███ ███    ███   ███    ███   \n" +
+			"   ███    █▀    ███    █▀    ███    ███   ███    ███ ███    █▀    ███    ███   \n" +
+			"   ███         ▄███▄▄▄       ███    ███  ▄███▄▄▄▄██▀ ███         ▄███▄▄▄▄███▄▄ \n" +
+			" ▀███████████ ▀▀███▀▀▀     ▀███████████ ▀▀███▀▀▀▀▀   ███        ▀▀███▀▀▀▀███▀  \n" +
+			"          ███   ███    █▄    ███    ███ ▀███████████ ███    █▄    ███    ███   \n" +
+			"    ▄█    ███   ███    ███   ███    ███   ███    ███ ███    ███   ███    ███   \n" +
+			"  ▄████████▀    ██████████   ███    █▀    ███    ███ ████████▀    ███    █▀  \n ";
+
+
+
 	private int option;
 	private Scanner scanner = new Scanner(System.in);
 
@@ -107,10 +121,26 @@ public class UI {
 					LibraryDB.listBorrowedItems(false);
 					break;
 				case 7:
-					break;
+					searchItem();
 				}
+				break;
 			}
+		}
 
+	}
+
+
+	private void searchItem() {
+		System.out.println(SEARCH);
+		String input = "";
+		while (!input.equalsIgnoreCase("q")) {
+			System.out.println(PLASE_PROVIDE_THE_TYPE_OF_ITEM_YOU_WANT_TO_SEARCH_FOR);
+			input = getInputFromConsole();
+			LibraryItem item = new LibraryItem();
+			if (input.equalsIgnoreCase("book") || input.equalsIgnoreCase("megazine") || input.equalsIgnoreCase("scientific article")) {
+				item = item.searchItem(input);
+				System.out.println(item.toString());
+			}
 		}
 	}
 
@@ -170,11 +200,11 @@ public class UI {
 			}
 		}
 	}
-	
+
 
 
 	private void updateItem() {
-		
+
 		String input = "";
 		while (!input.equalsIgnoreCase("q")) {
 			System.out.println(TYPE_THE_TYPE_OF_ITEM_YOU_WANT_TO_UPDATE);
@@ -201,9 +231,9 @@ public class UI {
 			}
 		}
 	}
-	
-	
-	
+
+
+
 	private void getUpdateInfoFromUser(Book book){
 		String column;
 		String newValue;
@@ -216,7 +246,7 @@ public class UI {
 		if (getInputFromConsole().equals("y"))
 			LibraryDB.updateItem(book, column, newValue);
 	}
-	
+
 	private void getUpdateInfoFromUser(Megazine megazine){
 		String column;
 		String newValue;
@@ -244,7 +274,7 @@ public class UI {
 
 
 	public boolean requestBookData(Book book){
-		
+
 		System.out.println(REGISTER_A_BOOK);
 
 		for (String key : Messages.getBookMessages().keySet()) {
@@ -256,7 +286,7 @@ public class UI {
 		return true;
 	}
 	public boolean requestMegazineData(Megazine megazine){
-		
+
 		System.out.println(REGISTER_A_MEGAZINE);
 
 		for (String key : Messages.getMegazineMessages().keySet()) {
@@ -269,7 +299,7 @@ public class UI {
 	}
 	//TODO
 	public boolean requestArticleData(ScientificArticle article){
-		
+
 		System.out.println(REGISTER_AN_ARTICLE);
 
 		for (String key : Messages.getScientificArticleMessages().keySet()) {
