@@ -4,11 +4,11 @@ import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
 import db.LibraryDB;
-import helper.Messages;
 
 
 public class LibraryItem {
 
+	private static final String ITEM_RETURNED_SUCCESSFULLY = "Item returned successfully!!\n";
 	private String barcode;
 	private String name;
 	private int numberOfPages;
@@ -28,66 +28,62 @@ public class LibraryItem {
 		this.available = available;
 	}
 
-	public boolean returnItem(String type){
-		showRequestMessage(Messages.getBookMessages().get("barcode"));
-		String input = getInputFromConsole();
+	public boolean returnItem(String type, String barcode){
 		switch(type.toLowerCase()){
 		case "book":
 			Book book = new Book();
-			book.setBarCode(input);
+			book.setBarCode(barcode);
 			LibraryDB.updateItem(book, "available", "1");
 			break;
 		case "megazine":
 			Megazine megazine = new Megazine();
-			megazine.setBarCode(input);
+			megazine.setBarCode(barcode);
 			LibraryDB.updateItem(megazine, "available", "1");
 			break;
 		case "scientific article":
 			ScientificArticle article = new ScientificArticle();
-			article.setBarCode(input);
+			article.setBarCode(barcode);
 			LibraryDB.updateItem(article, "available", "1");
 		default: return false;
 
 		}
+		System.out.println(ITEM_RETURNED_SUCCESSFULLY);
 		return true;
 	}
 	
-	public LibraryItem search(String type){
-		showRequestMessage(Messages.getBookMessages().get("barcode"));
-		String input = getInputFromConsole();
+	public LibraryItem search(String type, String barcode){
+
 		switch(type.toLowerCase()){
 		case "book":
-			return LibraryDB.getBook(input);
+			return LibraryDB.getBook(barcode);
 
 		case "megazine":
-			return LibraryDB.getMegazine(input);
+			return LibraryDB.getMegazine(barcode);
 
 		case "scientific article":
-			return LibraryDB.getArticle(input);
+			return LibraryDB.getArticle(barcode);
 		default: return new LibraryItem();
 
 		}
 
 	}
 
-	public boolean checkOut(String type){
-
-		showRequestMessage(Messages.getBookMessages().get("barcode"));
-		String input = getInputFromConsole();
+	public boolean checkOut(String type, String barcode){
+		
 		switch(type.toLowerCase()){
 		case "book":
 			Book book = new Book();
-			book.setBarCode(input);
+			book.setBarCode(barcode);
 			LibraryDB.updateItem(book, "available", "0");
 			break;
 		case "megazine":
 			Megazine megazine = new Megazine();
-			megazine.setBarCode(input);
+			megazine.setBarCode(barcode);
 			LibraryDB.updateItem(megazine, "available", "0");
 			break;
 		case "scientific article":
 			ScientificArticle article = new ScientificArticle();
-			article.setBarCode(input);
+			article.setBarCode(barcode);
 			LibraryDB.updateItem(article, "available", "0");
 		default: return false;
 
@@ -116,7 +112,7 @@ public class LibraryItem {
 			} else return false;
 
 		case "available":
-			if (userSetAvailability(userData))
+			if (setAvailability(userData))
 				return true;
 			else return false;
 
@@ -125,12 +121,12 @@ public class LibraryItem {
 	}
 
 
-	private boolean isPatterned(String userData) {
+	public boolean isPatterned(String userData) {
 		return StringUtils.isNumeric(userData) && userData.length() == 8;
 	}
 
 
-	private boolean userSetAvailability(String userData) {
+	private boolean setAvailability(String userData) {
 		if (userData.equalsIgnoreCase("y")){
 			setAvailable(true);
 			return true;

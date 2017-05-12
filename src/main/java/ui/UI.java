@@ -108,7 +108,8 @@ public class UI {
 					break;
 				}
 				case 2:
-					updateItem();	
+					updateItem();
+
 					break;
 				case 3:
 					checkOut();
@@ -133,27 +134,30 @@ public class UI {
 				}
 			}
 		}
-
-
 	}
 
 
 	private void searchItem() {
 		System.out.println(SEARCH);
-		String input = "";
-		while (!input.equalsIgnoreCase("q")) {
+		String typeOfItem = "";
+		while (!typeOfItem.equalsIgnoreCase("q")) {
 			System.out.println(PLASE_PROVIDE_THE_TYPE_OF_ITEM_YOU_WANT_TO_SEARCH_FOR);
-			input = getInputFromConsole();
+			typeOfItem = getInputFromConsole();
 			LibraryItem item = new LibraryItem();
-			if (input.equalsIgnoreCase("book") || input.equalsIgnoreCase("megazine") || input.equalsIgnoreCase("scientific article")) {
-				item = item.search(input);
-				if (!item.getBarcode().equals("")) {
+			if (isAnItem(typeOfItem)) {
+				String barcode = getBarcodeFromUser(item);
+				item = item.search(typeOfItem, barcode);
+				if (isItemRegistered(item)) { 
 					System.out.println("\n\n" + item.toString());
 				} else {
 					System.out.println("Item not registered");
 				}
 			}
 		}
+	}
+
+	private boolean isItemRegistered(LibraryItem item) {
+		return !item.getBarcode().equals("");
 	}
 
 	private void returnItem() {
@@ -163,23 +167,37 @@ public class UI {
 			System.out.println(TYPE_THE_TYPE_OF_ITEM_YOU_WANT_TO_RETURN);
 			input = getInputFromConsole();
 			LibraryItem item = new LibraryItem();
-			if (input.equalsIgnoreCase("book") || input.equalsIgnoreCase("megazine") || input.equalsIgnoreCase("scientific article")) {
-				item.returnItem(input);
+			if (isAnItem(input)) {
+				String barcode = getBarcodeFromUser(item);
+				if (item.isPatterned(barcode))
+					item.returnItem(input, barcode);
 			}
 		}
 	}
 
 	private void checkOut() {
 		System.out.println(CHECK_OUT);
-		String input = "";
-		while (!input.equalsIgnoreCase("q")) {
+		String type = "";
+		while (!type.equalsIgnoreCase("q")) {
 			System.out.println(TYPE_THE_TYPE_OF_ITEM_YOU_WANT_TO_CHECK_OUT);
-			input = getInputFromConsole();
+			type = getInputFromConsole();
 			LibraryItem item = new LibraryItem();
-			if (input.equalsIgnoreCase("book") || input.equalsIgnoreCase("megazine") || input.equalsIgnoreCase("scientific article")) {
-				item.checkOut(input);
+			if (isAnItem(type)) {
+				String barcode = getBarcodeFromUser(item);
+				if (item.isPatterned(barcode))
+					item.checkOut(type, barcode);
 			}
 		}
+	}
+
+	private String getBarcodeFromUser(LibraryItem item) {
+		item.showRequestMessage(Messages.getBookMessages().get("barcode"));
+		String barcode = getInputFromConsole();
+		return barcode;
+	}
+
+	private boolean isAnItem(String input) {
+		return input.equalsIgnoreCase("book") || input.equalsIgnoreCase("megazine") || input.equalsIgnoreCase("scientific article");
 	}
 
 	private void register() {
@@ -188,24 +206,14 @@ public class UI {
 			System.out.println(TYPE_THE_TYPE_OF_ITEM_YOU_WANT_TO_REGISTER);
 			input = getInputFromConsole();
 			switch (input.toLowerCase()) {
-			case "book": {
-				Book book = new Book();
-				if (requestBookData(book)){
-					LibraryDB.registerNewItem(book);
-				}
+			case "book": 
+				registerBook();
 				break;
-			}
 			case "megazine":
-				Megazine megazine = new Megazine();
-				if (requestMegazineData(megazine)){
-					LibraryDB.registerNewItem(megazine);
-				}
+				registerMegazine();
 				break;
 			case "scientific article":
-				ScientificArticle article = new ScientificArticle();
-				if (requestArticleData(article)){
-					LibraryDB.registerNewItem(article);
-				}
+				registerScientificArticle();
 				break;
 			default:
 				System.out.println("Not an type available");
@@ -213,7 +221,26 @@ public class UI {
 		}
 	}
 
+	private void registerScientificArticle() {
+		ScientificArticle article = new ScientificArticle();
+		if (requestArticleData(article)){
+			LibraryDB.registerNewItem(article);
+		}
+	}
 
+	private void registerMegazine() {
+		Megazine megazine = new Megazine();
+		if (requestMegazineData(megazine)){
+			LibraryDB.registerNewItem(megazine);
+		}
+	}
+
+	private void registerBook() {
+		Book book = new Book();
+		if (requestBookData(book)){
+			LibraryDB.registerNewItem(book);
+		}
+	}
 
 	private void updateItem() {
 
@@ -222,21 +249,14 @@ public class UI {
 			System.out.println(TYPE_THE_TYPE_OF_ITEM_YOU_WANT_TO_UPDATE);
 			input = getInputFromConsole();
 			switch (input.toLowerCase()) {
-			case "book": {
-				Book book = new Book();
-				if (book.requestData(Messages.getBookMessages().get("barcode"), "barcode"))
-					getUpdateInfoFromUser(book);
+			case "book": 
+				updateBook();
 				break;
-			}
 			case "megazine":
-				Megazine megazine = new Megazine();
-				if (megazine.requestData(Messages.getBookMessages().get("barcode"), "barcode"))
-					getUpdateInfoFromUser(megazine);
+				updateMegazine();
 				break;
 			case "scientific article":
-				ScientificArticle article = new ScientificArticle();
-				if (article.requestData(Messages.getBookMessages().get("barcode"), "barcode"))
-					getUpdateInfoFromUser(article);
+				updateScientificArticle();
 				break;
 			default:
 				System.out.println("Not an type available");
@@ -244,46 +264,71 @@ public class UI {
 		}
 	}
 
+	private void updateScientificArticle() {
+		ScientificArticle article = new ScientificArticle();
+		if (article.requestData(Messages.getBookMessages().get("barcode"), "barcode"))
+			getUpdateInfoFromUser(article);
+	}
 
+	private void updateMegazine() {
+		Megazine megazine = new Megazine();
+		if (megazine.requestData(Messages.getBookMessages().get("barcode"), "barcode"))
+			getUpdateInfoFromUser(megazine);
+	}
+
+	private void updateBook() {
+		Book book = new Book();
+		if (book.requestData(Messages.getBookMessages().get("barcode"), "barcode"))
+			getUpdateInfoFromUser(book);
+	}
 
 	private void getUpdateInfoFromUser(Book book){
 		String column;
 		String newValue;
 		System.out.println(PLEASE_PROVIDE_THE_FIELD_YOU_WANT_TO_UPDATE);
+		System.out.println("Fields available: \n");
+		LibraryDB.printColumnNames("book");
 		column = getInputFromConsole();
 		System.out.println(PLEASE_PROVIDE_THE_NEW_VALUE_OF_THE_FIELD);
 		newValue = getInputFromConsole();
 		System.out.println("You've chosen to update the field " + column + " to the new value of " + newValue);
 		System.out.println(TO_CONFIRM_TYPE_Y_FOLLOWING_BY_AN_ENTER_OR_TYPE_ANYTHING_ELSE_OR_JUST_AND_ENTER_TO_ESCAPE);
 		if (getInputFromConsole().equals("y"))
-			LibraryDB.updateItem(book, column, newValue);
+			if(LibraryDB.updateItem(book, column, newValue))
+				System.out.println("Item updated successfully");
 	}
 
 	private void getUpdateInfoFromUser(Megazine megazine){
 		String column;
 		String newValue;
 		System.out.println(PLEASE_PROVIDE_THE_FIELD_YOU_WANT_TO_UPDATE);
+		System.out.println("Fields available: \n");
+		LibraryDB.printColumnNames("megazine");
 		column = getInputFromConsole();
 		System.out.println(PLEASE_PROVIDE_THE_NEW_VALUE_OF_THE_FIELD);
 		newValue = getInputFromConsole();
 		System.out.println("You've chosen to update the field " + column + " to the new value of " + newValue);
 		System.out.println(TO_CONFIRM_TYPE_Y_FOLLOWING_BY_AN_ENTER_OR_TYPE_ANYTHING_ELSE_OR_JUST_AND_ENTER_TO_ESCAPE);
 		if (!getInputFromConsole().equals("y"))
-			LibraryDB.updateItem(megazine, column, newValue);
+			if(LibraryDB.updateItem(megazine, column, newValue))
+				System.out.println("Item updated successfully");
 	}
+
 	private void getUpdateInfoFromUser(ScientificArticle article){
 		String column;
 		String newValue;
 		System.out.println(PLEASE_PROVIDE_THE_FIELD_YOU_WANT_TO_UPDATE);
+		System.out.println("Fields available: \n");
+		LibraryDB.printColumnNames("Scientific_Article");
 		column = getInputFromConsole();
 		System.out.println(PLEASE_PROVIDE_THE_NEW_VALUE_OF_THE_FIELD);
 		newValue = getInputFromConsole();
 		System.out.println("You've chosen to update the field " + column + " to the new value of " + newValue);
 		System.out.println(TO_CONFIRM_TYPE_Y_FOLLOWING_BY_AN_ENTER_OR_TYPE_ANYTHING_ELSE_OR_JUST_AND_ENTER_TO_ESCAPE);
 		if (!getInputFromConsole().equals("y"))
-			LibraryDB.updateItem(article, column, newValue);
+			if(LibraryDB.updateItem(article, column, newValue))
+				System.out.println("Item updated successfully");
 	}
-
 
 	public boolean requestBookData(Book book){
 
@@ -297,6 +342,7 @@ public class UI {
 
 		return true;
 	}
+
 	public boolean requestMegazineData(Megazine megazine){
 
 		System.out.println(REGISTER_A_MEGAZINE);
@@ -309,7 +355,7 @@ public class UI {
 
 		return true;
 	}
-	//TODO
+
 	public boolean requestArticleData(ScientificArticle article){
 
 		System.out.println(REGISTER_AN_ARTICLE);
@@ -353,9 +399,4 @@ public class UI {
 		input = scanner.nextLine();
 		return input;
 	}
-
-
-
-
-
 }

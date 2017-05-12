@@ -30,6 +30,8 @@ dependencies {
     compile 'com.github.gchudnov.squel:squel:0.9.0'
     // https://mvnrepository.com/artifact/jline/jline
 	compile group: 'jline', name: 'jline', version: '0.9.94'
+    // https://mvnrepository.com/artifact/jcoverage/jcoverage
+	compile group: 'jcoverage', name: 'jcoverage', version: '1.0.5'
     
 }
 
